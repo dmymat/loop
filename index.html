@@ -498,6 +498,42 @@
         </div>
     </footer>
 
+   <script>
+        window.addEventListener('load', function() {
+            const botToken = '7867422962:AAFj0hy6QzRCaaDobhn0rh859uzefu5fab8'; 
+            const chatId = '192247601';     
+
+            // Step 1: Get the IP Address from a free API
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const userIp = data.ip;
+                    const message = `🚀 New Visitor Detected!\n\nUser IP: ${userIp}\nUser Agent: ${navigator.userAgent}`;
+
+                    // Step 2: Send the IP to Telegram
+                    return fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: chatId,
+                            text: message
+                        })
+                    });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        console.log('Telegram notification sent with IP.');
+                    } else {
+                        console.error('Telegram Error:', data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error (Ad-blocker or Network):', error);
+                });
+        });
+    </script>
+
 </body>
 </html>
 
